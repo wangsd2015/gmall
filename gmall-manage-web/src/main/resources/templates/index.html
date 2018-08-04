@@ -19,7 +19,7 @@
                 <h3 align="center"><a href="javascript:addAttrTabs();" style="text-decoration:none;">平台属性管理</a></h3>
             </div>
             <div title="商品信息管理">
-                <h3 align="center"><a href="#" style="text-decoration: none;">商品SPU管理</a></h3>
+                <h3 align="center"><a href="javascript:addSPUTabs();" style="text-decoration: none;">商品SPU管理</a></h3>
             </div>
             <div title="广告管理">
                 <h3 align="center"><a href="#" style="text-decoration: none;">广告管理</a></h3>
@@ -49,6 +49,18 @@
                 });
             }else{
                 $("#tt").tabs("select","平台属性管理");
+            }
+        }
+        function addSPUTabs() {
+            var b = $("#tt").tabs("exists","商品SPU管理");
+            if (!b) {
+                $("#tt").tabs("add",{
+                    title:"商品SPU管理",
+                    href:"spuListPage",
+                    closable:true
+                });
+            }else {
+                $("#tt").tabs("select","商品SPU管理");
             }
         }
     </script>
