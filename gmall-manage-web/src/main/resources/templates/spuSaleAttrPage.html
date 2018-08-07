@@ -38,6 +38,8 @@
     <script type="text/javascript">
         function initSpuSaleAttrDlg() {
             // 初始化销售属性的combobox
+            $("#saleAttrSelect").combobox("clear");
+            $("#spuSaleAttrValueDg").datagrid('loadData', {total: 0, rows: []});
             initSpuSaleAttrValueListDatagrid();
         }
         function initSpuSaleAttrValueListDatagrid() {

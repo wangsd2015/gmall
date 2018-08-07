@@ -15,22 +15,16 @@ public class SkuInfo  implements Serializable {
     @Id
     @Column
     String id;
-
     @Column
     String spuId;
-
     @Column
     BigDecimal price;
-
     @Column
     String skuName;
-
     @Column
     BigDecimal weight;
-
     @Column
     String skuDesc;
-
     @Column
     String catalog3Id;
 
@@ -45,7 +39,6 @@ public class SkuInfo  implements Serializable {
 
     @Transient
     List<SkuSaleAttrValue> skuSaleAttrValueList;
-
 
 
     public String getId() {

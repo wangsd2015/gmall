@@ -51,4 +51,11 @@ public class AttrController {
         attrService.editAttr(baseAttrInfo);
         return "success";
     }
+
+    @ResponseBody
+    @RequestMapping("/getAttrListByCtg3Id")
+    public List<BaseAttrInfo> getAttrListByCtg3Id(String catalog3Id) {
+        List<BaseAttrInfo> baseAttrInfoList = attrService.getAttrListByCtg3Id(catalog3Id);
+        return baseAttrInfoList;
+    }
 }

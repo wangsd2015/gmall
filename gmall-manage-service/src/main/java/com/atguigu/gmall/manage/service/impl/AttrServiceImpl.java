@@ -77,4 +77,19 @@ public class AttrServiceImpl implements AttrService {
         //更新base_attr_info数据
         baseAttrInfoMapper.updateByPrimaryKeySelective(baseAttrInfo);
     }
+
+    @Override
+    public List<BaseAttrInfo> getAttrListByCtg3Id(String catalog3Id) {
+        BaseAttrInfo baseAttrInfo = new BaseAttrInfo();
+        baseAttrInfo.setCatalog3Id(catalog3Id);
+        List<BaseAttrInfo> baseAttrInfoList = baseAttrInfoMapper.select(baseAttrInfo);
+        //封装平台属性值信息
+        for (BaseAttrInfo attrInfo : baseAttrInfoList) {
+            BaseAttrValue baseAttrValue = new BaseAttrValue();
+            baseAttrValue.setAttrId(attrInfo.getId());
+            List<BaseAttrValue> baseAttrValueList = baseAttrValueMapper.select(baseAttrValue);
+            attrInfo.setAttrValueList(baseAttrValueList);
+        }
+        return baseAttrInfoList;
+    }
 }

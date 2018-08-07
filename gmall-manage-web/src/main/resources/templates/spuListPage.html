@@ -51,8 +51,8 @@
         </div>
     </div>
     <div th:include="spuInfoPage"></div>
-    <!--<div th:include="skuInfoPage"></div>-->
-    <!--<div th:include="skuListPage"></div>-->
+    <div th:include="skuInfoPage"></div>
+    <div th:include="skuListPage"></div>
     <script type="text/javascript">
         //刷新列表
         function reloadSpuList(){
@@ -68,6 +68,29 @@
             $("#spu_dlg").dialog("open");
             //初始化对话框
             initSpuInfoDlg();
+        }
+
+        //打开添加Sku对话框
+        function addSkuInfo() {
+            //加判断列表中没有任何值时。。。
+            var spuInfo = $("#spulist_dg").datagrid("getSelected");
+            if (spuInfo) {
+                $("#sku_dlg").dialog("open");
+                initSkuInfoDlg(spuInfo);
+            } else {
+                $.messager.alert("系统消息","请选择下方列表中的一个选项","info");
+            }
+        }
+        //打开展示Sku对话框
+        function showSkuInfoList() {
+            //加判断列表中没有任何值时。。。
+            var spuInfo = $("#spulist_dg").datagrid("getSelected");
+            if (spuInfo) {
+                $("#skulist_dlg").dialog("open");
+                initSkuListDatagrid(spuInfo);
+            } else {
+                $.messager.alert("系统消息","请选择下方列表中的一个选项","info");
+            }
         }
 
     </script>
