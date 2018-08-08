@@ -6,6 +6,7 @@ import com.atguigu.gmall.bean.SpuInfo;
 import com.atguigu.gmall.bean.SpuSaleAttr;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SpuManageService {
     List<SpuInfo> getSpuList(String catalog3Id);
@@ -17,4 +18,6 @@ public interface SpuManageService {
     List<SpuSaleAttr> getSaleAttrListBySpuId(String spuId);
 
     List<SpuImage> getSpuImgListBySpuId(String spuId);
+
+    List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Map<String, String> paramMap);
 }

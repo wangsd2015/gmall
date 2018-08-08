@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -88,5 +89,10 @@ public class SpuManageServiceImpl implements SpuManageService {
         spuImage.setSpuId(spuId);
         List<SpuImage> spuImageList = spuImageMapper.select(spuImage);
         return spuImageList;
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Map<String, String> paramMap) {
+        return spuSaleAttrValueMapper.selectSpuSaleAttrListCheckBySku(paramMap);
     }
 }
