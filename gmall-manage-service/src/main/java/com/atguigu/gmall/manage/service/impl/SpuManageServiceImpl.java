@@ -1,11 +1,15 @@
 package com.atguigu.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.manage.mapper.*;
 import com.atguigu.gmall.service.SpuManageService;
+import com.atguigu.gmall.util.RedisUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,8 @@ public class SpuManageServiceImpl implements SpuManageService {
     private SpuSaleAttrValueMapper spuSaleAttrValueMapper;
     @Autowired
     private SpuImageMapper spuImageMapper;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public List<SpuInfo> getSpuList(String catalog3Id) {
@@ -93,6 +99,25 @@ public class SpuManageServiceImpl implements SpuManageService {
 
     @Override
     public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Map<String, String> paramMap) {
-        return spuSaleAttrValueMapper.selectSpuSaleAttrListCheckBySku(paramMap);
+
+        List<SpuSaleAttr> spuSaleAttrList = null;
+        Jedis jedis = redisUtil.getJedis();
+        String spuSaleAttrListKey = "ssa:" + "map" + ":list";
+        List<String> spuSaleAttrListValues = jedis.lrange(spuSaleAttrListKey,0,-1);
+        if (spuSaleAttrListValues.size() == 0) {
+            //缓存中没有记录
+            //从数据库中查询
+            spuSaleAttrList = spuSaleAttrValueMapper.selectSpuSaleAttrListCheckBySku(paramMap);
+            if (spuSaleAttrList.size() == 0) {
+                // 数据库中没有数据
+                return null;
+            }
+            //更新缓存数据
+            for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
+                String spuSaleAttrJson = JSON.toJSONString(spuSaleAttr);
+                jedis.lpush(spuSaleAttrListKey,spuSaleAttrJson);
+            }
+        }
+        return spuSaleAttrList;
     }
 }
