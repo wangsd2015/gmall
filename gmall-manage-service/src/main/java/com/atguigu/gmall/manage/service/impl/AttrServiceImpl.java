@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -90,6 +91,13 @@ public class AttrServiceImpl implements AttrService {
             List<BaseAttrValue> baseAttrValueList = baseAttrValueMapper.select(baseAttrValue);
             attrInfo.setAttrValueList(baseAttrValueList);
         }
+        return baseAttrInfoList;
+    }
+
+    @Override
+    public List<BaseAttrInfo> getBaseAttrListByValueIds(Set<String> valueIds) {
+
+        List<BaseAttrInfo> baseAttrInfoList = baseAttrInfoMapper.selectBaseAttrListByValueIds(valueIds);
         return baseAttrInfoList;
     }
 }
