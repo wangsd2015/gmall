@@ -125,11 +125,4 @@ public class GmallListServiceApplicationTests {
 	}
 
 
-	@Test
-	public void test() {
-		String[] str = new String[3];
-		str[0] = "";str[1] = "";str[2] = "";
-		System.out.println(str == null);
-	}
-
 }

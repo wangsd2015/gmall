@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class ListController {
@@ -39,6 +36,9 @@ public class ListController {
         // 封装请求地址信息
         String urlParam = getUrlParam(skuLsParam);
 
+        // 封装面包屑信息
+        List<Crumb> crumbs = new ArrayList<>();
+
         // 将已经选中的平台属性从所有的平台属性中删除
         String[] valueIds = skuLsParam.getValueId();
         if (valueIds != null && valueIds.length > 0) {
@@ -50,6 +50,13 @@ public class ListController {
                     String valueId = baseAttrValue.getId();
                     for (String id : valueIds) {
                         if (valueId.equals(id)) {
+                            // 每个面包屑的URL地址相当于当前请求的地址，去掉平台属性列表值所对应的valueId
+                            String urlParamForCrumb = getUrlParamForCrumb(skuLsParam, id);
+                            Crumb crumb = new Crumb();
+                            crumb.setUrlParam(urlParamForCrumb);
+                            crumb.setValueName(baseAttrValue.getValueName());
+                            crumbs.add(crumb);
+                            //移除平台属性
                             iterator.remove();
                         }
                     }
@@ -57,10 +64,50 @@ public class ListController {
             }
         }
 
+        map.put("attrValueSelectedList", crumbs);
         map.put("urlParam", urlParam);
         map.put("attrList",baseAttrInfoList);
         map.put("skuLsInfoList",skuLsInfoList);
         return "list";
+    }
+
+    /**
+     * 拼接面包屑url
+     * @param skuLsParam
+     * @return
+     */
+    public String getUrlParamForCrumb(SkuLsParam skuLsParam, String id) {
+
+        String url = "";
+
+        String catalog3Id = skuLsParam.getCatalog3Id();
+        String keyword = skuLsParam.getKeyword();
+        String[] valueIds = skuLsParam.getValueId();
+
+        if (StringUtils.isNotBlank(catalog3Id)) {
+            if (StringUtils.isNotBlank(url)) {
+                url = url + "&catalog3Id=" + catalog3Id;
+            } else {
+                url = "catalog3Id=" + catalog3Id;
+            }
+        }
+
+        if (StringUtils.isNotBlank(keyword)) {
+            if (StringUtils.isNotBlank(keyword)) {
+                url = url + "&keyword=" + keyword;
+            } else {
+                url = "keyword=" + keyword;
+            }
+        }
+
+        if (valueIds != null && valueIds.length > 0) {
+            for (String valueId : valueIds) {
+                if (!valueId.equals(id)) {
+                    url = url + "&valueId=" + valueId;
+                }
+            }
+        }
+        return url;
     }
 
     /**

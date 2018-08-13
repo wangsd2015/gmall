@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.highlight.HighlightBuilder;
 
 public class DSLUtils {
 
@@ -37,9 +38,16 @@ public class DSLUtils {
             MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("skuName",keyword);
             boolQueryBuilder.must(matchQueryBuilder);
         }
+        HighlightBuilder h = new HighlightBuilder();
+        h.field("skuName");
 
         // 将query和from和size放入dsl
         dsl.query(boolQueryBuilder);
+        // 高亮
+        dsl.highlight(h);
+        h.preTags("<span style='color:red;font-weight:bolder;'>");
+        h.postTags("</span>");
+        // 分页
         dsl.from(0);
         dsl.size(1000);
         System.out.println(dsl.toString());

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -136,7 +137,7 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public List<SkuInfo> getSkuSaleAttrValueListBySpu(String spuId) {
 
-        List<SkuInfo> skuInfoList = null;
+        List<SkuInfo> skuInfoList = new ArrayList<>();
 
         Jedis jedis = redisUtil.getJedis();
         String skuInfoListKey = "skuInfo:" + spuId + ":List";
@@ -153,6 +154,10 @@ public class SkuServiceImpl implements SkuService {
             for (SkuInfo skuInfo : skuInfoList) {
                 String skuInfoJson = JSON.toJSONString(skuInfo);
                 jedis.lpush(skuInfoListKey,skuInfoJson);
+            }
+        } else {
+            for (String skuInfoListValue : skuInfoListValues) {
+                skuInfoList.add(JSON.parseObject(skuInfoListValue, SkuInfo.class));
             }
         }
         return skuInfoList;

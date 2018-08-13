@@ -1,4 +1,4 @@
-package com.atguigu.gmall.list;
+package com.atguigu.gmall.cart;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,13 +7,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GmallListWebApplicationTests {
+public class GmallCartWebApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		String[] str = new String[3];
-		//str[0] = "";str[1] = "";str[2] = "";
-		System.out.println(str == null);
 	}
 
 }

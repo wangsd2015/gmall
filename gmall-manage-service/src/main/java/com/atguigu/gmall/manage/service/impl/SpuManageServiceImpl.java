@@ -6,11 +6,11 @@ import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.manage.mapper.*;
 import com.atguigu.gmall.service.SpuManageService;
 import com.atguigu.gmall.util.RedisUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +100,7 @@ public class SpuManageServiceImpl implements SpuManageService {
     @Override
     public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Map<String, String> paramMap) {
 
-        List<SpuSaleAttr> spuSaleAttrList = null;
+        List<SpuSaleAttr> spuSaleAttrList = new ArrayList<>();
         Jedis jedis = redisUtil.getJedis();
         String spuSaleAttrListKey = "ssa:" + "map" + ":list";
         List<String> spuSaleAttrListValues = jedis.lrange(spuSaleAttrListKey,0,-1);
@@ -116,6 +116,10 @@ public class SpuManageServiceImpl implements SpuManageService {
             for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
                 String spuSaleAttrJson = JSON.toJSONString(spuSaleAttr);
                 jedis.lpush(spuSaleAttrListKey,spuSaleAttrJson);
+            }
+        } else {
+            for (String spuSaleAttrListValue : spuSaleAttrListValues) {
+                spuSaleAttrList.add(JSON.parseObject(spuSaleAttrListValue, SpuSaleAttr.class));
             }
         }
         return spuSaleAttrList;

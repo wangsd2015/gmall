@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ListServiceImpl implements ListService {
@@ -34,6 +35,15 @@ public class ListServiceImpl implements ListService {
             List<SearchResult.Hit<SkuLsInfo, Void>> hits = result.getHits(SkuLsInfo.class);
             for (SearchResult.Hit<SkuLsInfo, Void> hit : hits) {
                 SkuLsInfo source = hit.source;
+                // 获取高亮信息
+                Map<String, List<String>> highlight = hit.highlight;
+                // 判断keyword是否为空，否则报空指针
+                if (highlight != null && highlight.size() > 0) {
+                    List<String> skuName = highlight.get("skuName");
+                    System.out.println("****" + skuName.size() + "****");
+                    System.out.println("****" + skuName.get(0) + "****");
+                    source.setSkuName(skuName.get(0));
+                }
                 skuLsInfoList.add(source);
             }
         } catch (IOException e) {
